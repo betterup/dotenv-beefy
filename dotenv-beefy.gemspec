@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Load all the application environments }
   spec.description   = %q{Load all relevant .env files to boot usable application environment}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/betterup/dotenv-beefy"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
