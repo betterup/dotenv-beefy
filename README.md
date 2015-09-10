@@ -8,8 +8,8 @@ Similar to dotenv-rails, but better ;)
 Automatically loads dotfiles for environment configuration with the following
 precedence (highest precedence first):
 * .env.local - local customizations
-* .env.<RAILS_ENV> - Rails environment settings (ex: development, test, production, etc)
-* .env.<HOST_FAMILY> - OS settings (ex: darwin, nix, cygwin)
+* .env.RAILS_ENV - Rails environment settings (ex: development, test, production, etc)
+* .env.HOST_FAMILY - OS settings (ex: darwin, nix, cygwin)
 * .env - Global defaults
 
 ## Installation
