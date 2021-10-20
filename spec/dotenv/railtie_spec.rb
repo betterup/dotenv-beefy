@@ -16,10 +16,10 @@ describe Dotenv::Beefy::Railtie do
 
     before do
       initialize_mock_file_reads
+      mock_dotenv_file
     end
 
     it 'loads .env' do
-      mock_dotenv_file
       load_environments
 
       expect(ENV['FOO']).to eq('bar')
@@ -28,8 +28,6 @@ describe Dotenv::Beefy::Railtie do
     end
 
     it 'overrides .env values with .env.test values' do
-      mock_dotenv_file
-
       contents = <<-FILE
       FOO=bizz
       BAZ=farf
@@ -44,8 +42,26 @@ describe Dotenv::Beefy::Railtie do
       expect(ENV['ANSWER']).to eq('99')
     end
 
+    it 'loads values from .env, .env.test and .env.test.local files' do
+      contents = <<-FILE
+      FOO=bizz
+      BAZ=farf
+      ANSWER=99
+      FILE
+      mock_file_read(filename: '.env.test', contents: contents)
+      
+      contents = <<-FILE
+      ANSWER=1234567
+      SECRET=ssshhhhh
+      FILE
+      mock_file_read(filename: '.env.test.local', contents: contents)
 
-    it 'overrides .env values with more specific .env.test values'
-    it 'loads values from .env, .env.test and .env.test.local files'
+      load_environments
+
+      expect(ENV['FOO']).to eq('bizz')
+      expect(ENV['BAZ']).to eq('farf')
+      expect(ENV['ANSWER']).to eq('1234567')
+      expect(ENV['SECRET']).to eq('ssshhhhh')
+    end
   end
 end
