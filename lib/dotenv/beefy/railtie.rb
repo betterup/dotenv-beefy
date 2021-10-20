@@ -7,9 +7,15 @@ module Dotenv
       config.before_configuration { load_environments }
 
       def load_environments
-        files = environments.map { |env| ".env.#{env}" }
+        files = []
+        
         files << '.env'
-        Dotenv.load(*files)
+
+        environments.each do |env| 
+          files << ".env.#{env}"
+        end
+        
+        Dotenv.overload(*files)
       end
 
       def environments
