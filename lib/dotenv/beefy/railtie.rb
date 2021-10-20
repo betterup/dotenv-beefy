@@ -7,31 +7,32 @@ module Dotenv
       config.before_configuration { load_environments }
 
       # Load environment dotfiles in the following order (e.g. if in "test" environment on "darwin")
-      # 1. .env
-      # 2. .env.local
-      # 3. .env.test
-      # 4. .env.darwin
-      # 5. .env.test.local
-      # 6. .env.darwin.local
+      # 1. .env.test.local
+      # 2. .env.darwin.local
+      # 3. .env.local
+      # 4. .env.test
+      # 5. .env.darwin
+      # 6. .env
       # 
-      # The order matters, because files loaded later will override values set previously.
-      # .env.local will override any similar keys/values found in .env
-      # .env.test.local will override any similar values found in .env.test, and .env, etc.
+      # The order matters, because the files loaded first will "lock in" the value for that ENV var.
+      # Dotenv.load memoizes each ENV value, and if the value is set, it cannot be updated later.
+      # If you want to update ENV values as new values come in, you need to use Dotenv.overload(*files)
       def load_environments
         files = []
         
-        files << '.env'
-        files << '.env.local'
+        environments.each do |env| 
+          files << ".env.#{env}.local"
+        end
 
+        files << '.env.local' unless Rails.env.test? # this is a dotenv-rails convention
+        
         environments.each do |env| 
           files << ".env.#{env}"
         end
 
-        environments.each do |env| 
-          files << ".env.#{env}.local"
-        end
+        files << '.env'
         
-        Dotenv.overload(*files)
+        Dotenv.load(*files)
       end
 
       def environments
