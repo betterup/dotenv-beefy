@@ -5,12 +5,24 @@
 Similar to dotenv-rails, but better ;)
 
 ## Features
-Automatically loads dotfiles for environment configuration with the following
-precedence (highest precedence first):
+Automatically loads dotfiles for environment configuration with the following precedence (higher files' values are overwritten by files loaded after).
+
+* .env - Global defaults
 * .env.local - local customizations
 * .env.RAILS_ENV - Rails environment settings (ex: development, test, production, etc)
 * .env.HOST_FAMILY - OS settings (ex: darwin, nix, cygwin)
-* .env - Global defaults
+* .env.RAILS_ENV.local - Local customizations for a given Rails environment (usually not committed to your git repo)
+* .env.HOST_FAMILY.local - Local OS settings for a given OS (usually not committed to your git repo)
+
+This allows you to set some sensible defaults in `.env` and have those values overwritten in the following order:
+
+- `.env.local`
+- `.env.RAILS_ENV`
+- `.env.HOST_FAMILY`
+- `.env.RAILS_ENV.local`
+- `.env.HOST_FAMILY.local`
+
+The files listed last will have the final say on what the final values of each ENV variable is set to, so ONLY override those values in subsequent `.env` files if you need to override that value for your specific local needs.
 
 ## Installation
 
