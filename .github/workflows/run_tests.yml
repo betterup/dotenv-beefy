@@ -1,6 +1,6 @@
 name: Run RSpec tests
 on: [push, pull_request]
-jobs: 
+jobs:
   test:
     runs-on: ubuntu-latest
     env:
@@ -8,10 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1.81.0
+        uses: ruby/setup-ruby@v1.190.0
         with:
           # Not needed with a .ruby-version file
-          ruby-version: 2.7
+          ruby-version: 3.3.0
           bundler-cache: true
       - name: Run tests
         run: |
